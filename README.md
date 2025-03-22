@@ -1,6 +1,4 @@
-Below is the complete advanced documentation (README.md) for your ADAS & AI/ML prototype project. This file provides a detailed overview of your project, explains each step in the processing pipeline, describes the two main approaches (2D contour-based and 3D LIDAR-based), and includes sample outputs and references. You can copy and adjust the text as needed.
 
----
 
 # ADAS & AI/ML Prototype
 
