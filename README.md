@@ -246,7 +246,3 @@ The saved output image (e.g., `output_lidar_refined_0000000010.png`) includes:
 - **KITTI Dataset**: [http://www.cvlibs.net/datasets/kitti/](http://www.cvlibs.net/datasets/kitti/)
 - **YOLOv5 GitHub Repository**: [https://github.com/ultralytics/yolov5](https://github.com/ultralytics/yolov5)
 - **PyTorch Hub YOLOv5 Usage**: [https://github.com/ultralytics/yolov5/wiki/PyTorch-Hub-Usage](https://github.com/ultralytics/yolov5/wiki/PyTorch-Hub-Usage)
-
----
-
-This advanced documentation provides a comprehensive overview of the ADAS & AI/ML prototype. It details the workflow, explains the key code modules, and instructs on how to run both the 2D and 3D demonstration scripts. You can include this README.md in your final PDF submission along with screenshots and sample outputs to demonstrate the complete functionality of your prototype.
