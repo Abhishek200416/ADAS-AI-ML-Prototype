@@ -1,6 +1,7 @@
 import os
 import cv2
 import numpy as np
+import winsound  # For audio alert on Windows
 
 # 1) YOLO detection
 from src.data_preprocessing import preprocess_frame
@@ -112,15 +113,25 @@ def refine_detections_with_lidar(detections, lidar_points, velo_to_cam, R_rect, 
 ##############################################
 def overlay_detections(image, detections):
     """
-    Draw YOLO box in blue, refined box in green, and label in red text.
+    Draw YOLO detection box in blue (with thicker or dashed line),
+    refined box in green, and label in red text.
     """
     out = image.copy()
     for det in detections:
+        # Original YOLO detection in BLUE
         bbox = list(map(int, det['bbox']))
-        cv2.rectangle(out, (bbox[0], bbox[1]), (bbox[2], bbox[3]), (255, 0, 0), 2)
+        # Use a dashed line effect (cv2.LINE_4 or cv2.LINE_8) + thickness 2 or 3
+        cv2.rectangle(out, (bbox[0], bbox[1]), (bbox[2], bbox[3]),
+                      (255, 0, 0), thickness=3, lineType=cv2.LINE_4)
+
+        # Refined bounding box in GREEN
         if 'refined_bbox' in det:
             rb = list(map(int, det['refined_bbox']))
-            cv2.rectangle(out, (rb[0], rb[1]), (rb[2], rb[3]), (0, 255, 0), 2)
+            # Draw with a normal line or slightly offset
+            cv2.rectangle(out, (rb[0], rb[1]), (rb[2], rb[3]),
+                          (0, 255, 0), thickness=2, lineType=cv2.LINE_8)
+
+        # Overlay the label
         label = det['class']
         cv2.putText(out, label, (bbox[0], bbox[1] - 10),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
@@ -141,7 +152,8 @@ def overlay_decision_text(image, decision_text, position=(50, 50)):
     Overlay decision text (e.g., "Brake" or "Continue") on the image.
     """
     out = image.copy()
-    cv2.putText(out, decision_text, position, cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 0, 255), 3)
+    cv2.putText(out, decision_text, position, cv2.FONT_HERSHEY_SIMPLEX,
+                1.0, (0, 0, 255), 3)
     return out
 
 ##############################################
@@ -195,6 +207,12 @@ def main():
     # Assume decision text is derived from the first decision (e.g., "Brake" if any detection is critical)
     decision_text = decisions[0]['action'] if decisions else "No Decision"
 
+    # More urgent repeated beep if "Brake"
+    if decision_text == "Brake":
+        for _ in range(3):
+            winsound.Beep(1200, 400)  # 1200 Hz for 400 ms
+            cv2.waitKey(100)         # short pause between beeps
+
     # 4) Load Calibration & LIDAR
     print("\n=== Calibration & LIDAR ===")
     velo_to_cam = load_calib_velo_to_cam(velo_to_cam_path)
@@ -224,7 +242,6 @@ def main():
     print("\n=== Visualization ===")
     image_boxes = overlay_detections(image, refined_dets)
     image_lidar = overlay_colored_points(image_boxes, proj_filtered, colors, radius=1)
-    # Overlay decision text on the image (position can be adjusted)
     image_final = overlay_decision_text(image_lidar, f"Decision: {decision_text}", position=(50, 50))
 
     cv2.imshow("Detections (Blue: YOLO, Green: LIDAR-Refined)", image_boxes)
