@@ -246,3 +246,9 @@ The saved output image (e.g., `output_lidar_refined_0000000010.png`) includes:
 - **KITTI Dataset**: [http://www.cvlibs.net/datasets/kitti/](http://www.cvlibs.net/datasets/kitti/)
 - **YOLOv5 GitHub Repository**: [https://github.com/ultralytics/yolov5](https://github.com/ultralytics/yolov5)
 - **PyTorch Hub YOLOv5 Usage**: [https://github.com/ultralytics/yolov5/wiki/PyTorch-Hub-Usage](https://github.com/ultralytics/yolov5/wiki/PyTorch-Hub-Usage)
+-  Abstract Refer this for the simple end
+[ADAS.pdf](https://github.com/user-attachments/files/19409944/ADAS.pdf)
+
+ 
+  
+   
